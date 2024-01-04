@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+message Item {
+
+}
+
+message CreateOrderRequest {
+  reserved 1 to 15;
+  reserved "user_id";
+  repeated Item items = 16;
+  float amount = 17;
+}
