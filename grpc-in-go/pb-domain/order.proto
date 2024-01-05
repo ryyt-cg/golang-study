@@ -1,12 +1,19 @@
 syntax = "proto3";
 
 message Item {
-
+  string name = 1;
 }
 
 message CreateOrderRequest {
-  reserved 1 to 15;
-  reserved "user_id";
-  repeated Item items = 16;
-  float amount = 17;
+  int64 user_id = 1;
+  repeated Item items = 2;
+  float total_price = 3;
+}
+
+message CreateOrderResponse {
+  int64 order_id = 1;
+}
+
+service Order {
+  rpc Create(CreateOrderRequest) returns (CreateOrderResponse){}
 }

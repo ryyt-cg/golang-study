@@ -1,0 +1,25 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+proto_library(
+    name = "order_proto",
+    srcs = ["order.proto"],
+    visibility = ["//visibility:public"],
+)
+
+go_proto_library(
+    name = "order_go_proto",
+    compiler = "@io_bazel_rules_go//proto:go_grpc",
+    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
+    importpath = "gitlab.con/aionx/go-examples/grpc-in-go/pb-domain",
+    proto = ":order_proto",
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "pb-domain",
+    embed = [":order_go_proto"],
+    importpath = "gitlab.con/aionx/go-examples/grpc-in-go/pb-domain",
+    visibility = ["//visibility:public"],
+)
