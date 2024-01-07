@@ -1,5 +1,10 @@
 # gRPC in Go
 
+## Goal
+
+
+
+## Implementation
 * create grpc-in-go folder
 * add WORKSPACE and BUILD.bazel
 
@@ -8,6 +13,10 @@ like WORKSPACE with no extension and BUILD.bazel with extension throughout the p
 
 <!-- TOC -->
 * [gRPC in Go](#grpc-in-go)
+  * [Create Protobuf Domain Package](#create-protobuf-domain-package)
+    * [Add Order Protobuf](#add-order-protobuf)
+  * [Configure Gazelle for go mod](#configure-gazelle-for-go-mod)
+  * [Order service implementation](#order-service-implementation)
 <!-- TOC -->
 
 ## Create Protobuf Domain Package
