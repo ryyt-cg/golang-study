@@ -2,6 +2,11 @@
 
 ## Goal
 
+| Task # | Description                           | URL                                            |
+|--------|---------------------------------------|------------------------------------------------|
+| 1      | Converting multi-repos into mono-repo | https://github.com/industriousparadigm/go-grpc |
+| 2      | Implementing order-payment service    |                                                |
+
 
 
 ## Implementation
@@ -13,6 +18,8 @@ like WORKSPACE with no extension and BUILD.bazel with extension throughout the p
 
 <!-- TOC -->
 * [gRPC in Go](#grpc-in-go)
+  * [Goal](#goal)
+  * [Implementation](#implementation)
   * [Create Protobuf Domain Package](#create-protobuf-domain-package)
     * [Add Order Protobuf](#add-order-protobuf)
   * [Configure Gazelle for go mod](#configure-gazelle-for-go-mod)
@@ -21,7 +28,7 @@ like WORKSPACE with no extension and BUILD.bazel with extension throughout the p
 
 ## Create Protobuf Domain Package
 * create pb-domain
-* add BUILD or BUILD.bazel enpty file
+* add BUILD or BUILD.bazel empty file
 
 ### Add Order Protobuf
 ```protobuf
