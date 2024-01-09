@@ -6,6 +6,7 @@ import (
 	greetpb "gitlab.con/aionx/go-examples/grpc-in-go/pb-domain/greet"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"io"
 	"time"
 )
@@ -15,11 +16,14 @@ var log *zap.Logger
 func main() {
 	log, _ = zap.NewProduction()
 	log.Info("Greetings, je suis un client")
-	cc, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+
+	// Create gRPC client connection
+	cc, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal("could not connect.", zap.Error(err))
 	}
 
+	// close connection right before exiting main function
 	defer cc.Close()
 
 	c := greetpb.NewGreetServiceClient(cc)

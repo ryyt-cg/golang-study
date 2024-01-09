@@ -67,11 +67,13 @@ func main() {
 	log, _ = zap.NewProduction()
 	log.Info("Greet server is a-go!")
 
+	// Create TCP listener
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 	if err != nil {
 		log.Fatal("Failed to listen", zap.Error(err))
 	}
 
+	// create grpc and register service
 	s := grpc.NewServer()
 	greetpb.RegisterGreetServiceServer(s, &server{})
 
