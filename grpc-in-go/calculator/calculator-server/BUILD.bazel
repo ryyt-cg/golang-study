@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "calculator-server_lib",
+    srcs = ["server.go"],
+    importpath = "gitlab.con/aionx/go-examples/grpc-in-go/calculator/calculator-server",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//pb-domain/calculator",
+        "@org_golang_google_grpc//:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "calculator-server",
+    embed = [":calculator-server_lib"],
+    visibility = ["//visibility:public"],
+)

@@ -8,7 +8,7 @@
 | 2      | Implementing order-payment service    |                                                |
 
 
-
+# Configure and Setting Bazel & Gazelle Repo
 ## Implementation
 * create grpc-in-go folder
 * add WORKSPACE and BUILD.bazel
@@ -113,6 +113,7 @@ bazel build //...
 
 ## Configure Gazelle for go mod
 * Add this to BUILD.bazel in root project
+* Initialize go mod project - go mod init gitlab.com/aionx/go-examples/grpc-in-go
 
 BUILD.bazel
 ```build
@@ -188,5 +189,58 @@ load("@bazel_gazelle//:deps.bzl", "go_repository")
 def go_dependencies():
     pass
 ```
+
+## Greet gRPC Implementation
+* create greet-server bazel package
+* create greet-client bazel package
+* add greet.proto file
+
+```protobuf
+syntax = "proto3";
+
+package greet;
+
+message Greeting {
+  string first_name = 1;
+  string last_name = 2;
+}
+
+message GreetRequest {
+  Greeting greeting = 1;
+}
+
+message GreetResponse {
+  string result = 1;
+}
+
+message GreetManyTimesRequest {
+  Greeting greeting = 1;
+}
+
+message GreetManyTimesResponse {
+  string result = 1;
+}
+
+message LongGreetRequest {
+  Greeting greeting = 1;
+}
+
+message LongGreetResponse {
+  string result = 1;
+}
+
+service GreetService {
+  // Unary
+  rpc Greet(GreetRequest) returns (GreetResponse){};
+  // Server streaming
+  rpc GreetManyTimes(GreetManyTimesRequest) returns (stream GreetManyTimesResponse){};
+  // Client Streaming
+  rpc LongGreet(stream LongGreetRequest) returns (LongGreetResponse){};
+}
+```
+* add main.go for greet-server and greet-client
+* run commands - bazel run //:gazelle-update-repos && bazel run //:gazelle to generate BUILD.bazel files
+* 
+
 
 ## Order service implementation
