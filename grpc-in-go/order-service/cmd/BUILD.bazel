@@ -8,7 +8,9 @@ go_library(
     deps = [
         "//order-service/config/app",
         "//order-service/pkg/db",
+        "//pb-domain/greet",
         "@io_gorm_gorm//:gorm",
+        "@org_golang_google_grpc//:go_default_library",
         "@org_uber_go_zap//:zap",
     ],
 )
