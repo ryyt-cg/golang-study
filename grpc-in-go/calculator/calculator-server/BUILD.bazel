@@ -6,6 +6,7 @@ go_library(
     importpath = "gitlab.con/aionx/go-examples/grpc-in-go/calculator/calculator-server",
     visibility = ["//visibility:private"],
     deps = [
+        "//calculator/calculator-server/rpc/calculator:calculator_rpc",
         "//pb-domain/calculator",
         "@org_golang_google_grpc//:go_default_library",
     ],

@@ -19,8 +19,6 @@ func NewGreetRpc() *Rpc {
 	return &Rpc{zap.L()}
 }
 
-type server struct{}
-
 func (rpc *Rpc) Greet(ctx context.Context, req *greetpb.GreetRequest) (*greetpb.GreetResponse, error) {
 	rpc.log.Info("Greet function was invoked with.", zap.String("request", req.String()))
 	firstName := req.GetGreeting().GetFirstName()
