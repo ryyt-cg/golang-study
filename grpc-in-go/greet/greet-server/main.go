@@ -1,98 +1,14 @@
 package main
 
 import (
-	"context"
+	"gitlab.con/aionx/go-examples/grpc-in-go/greet/greet-server/rpc/greet"
 	greetpb "gitlab.con/aionx/go-examples/grpc-in-go/pb-domain/greet"
 	"go.uber.org/zap"
-	"io"
-	"net"
-	"strconv"
-	"time"
-
 	"google.golang.org/grpc"
+	"net"
 )
 
 var log *zap.Logger
-
-type server struct{}
-
-func (*server) Greet(ctx context.Context, req *greetpb.GreetRequest) (*greetpb.GreetResponse, error) {
-	log.Info("Greet function was invoked with.", zap.String("request", req.String()))
-	firstName := req.GetGreeting().GetFirstName()
-	result := "Greetings " + firstName
-	response := &greetpb.GreetResponse{
-		Result: result,
-	}
-	return response, nil
-}
-
-func (*server) GreetManyTimes(req *greetpb.GreetManyTimesRequest, stream greetpb.GreetService_GreetManyTimesServer) error {
-	log.Info("GreetManyTimes function was invoked with.", zap.String("request", req.String()))
-	firstName := req.GetGreeting().GetFirstName()
-	for i := 0; i < 10; i++ {
-		result := "Bonjour " + firstName + " " + strconv.Itoa(i) + " fois!"
-		res := &greetpb.GreetManyTimesResponse{
-			Result: result,
-		}
-
-		err := stream.Send(res)
-		if err != nil {
-			log.Error("error while sending stream.", zap.Error(err))
-		}
-
-		time.Sleep(600 * time.Millisecond)
-	}
-	return nil
-}
-
-func (*server) LongGreet(stream greetpb.GreetService_LongGreetServer) error {
-	log.Info("LongGreet function was invoked with a stream thing.")
-	result := ""
-
-	for {
-		req, err := stream.Recv()
-
-		if err == io.EOF { // client stream fully read
-			return stream.SendAndClose(&greetpb.LongGreetResponse{
-				Result: result,
-			})
-		}
-
-		if err != nil {
-			log.Fatal("Error while reading client stream", zap.Error(err))
-		}
-
-		firstName := req.GetGreeting().GetFirstName()
-		result += "Hello " + firstName + "!\n"
-	}
-}
-
-func (*server) GreetEveryone(stream greetpb.GreetService_GreetEveryoneServer) error {
-	log.Info("GreetEveryone function was invoked with a stream request.")
-
-	for {
-		req, err := stream.Recv()
-		if err == io.EOF {
-			return nil
-		}
-
-		if err != nil {
-			log.Fatal("Error while reading client stream", zap.Error(err))
-			return err
-		}
-
-		firstName := req.GetGreeting().GetFirstName()
-		result := "Hello " + firstName + "! "
-		err = stream.Send(&greetpb.GreetEveryoneResponse{
-			Result: result,
-		})
-
-		if err != nil {
-			log.Fatal("Error while sending data to client stream.", zap.Error(err))
-			return err
-		}
-	}
-}
 
 func main() {
 	log, _ = zap.NewProduction()
@@ -106,7 +22,8 @@ func main() {
 
 	// create grpc and register service
 	s := grpc.NewServer()
-	greetpb.RegisterGreetServiceServer(s, &server{})
+	greetServer := greet.NewGreetRpc()
+	greetpb.RegisterGreetServiceServer(s, greetServer)
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatal("Failed to serve?!.", zap.Error(err))
