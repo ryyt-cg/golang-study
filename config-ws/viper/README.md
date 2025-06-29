@@ -22,7 +22,7 @@ Viper is a complete configuration solution for Go applications
 ```
 
 ## Demo
-This module demonstrates the Viper reading yaml configuration files and unmarshalling yaml into Go structs.
+This module demonstrates the Viper reading yaml configuration files and unmarshalling yaml into Go structs.  Print out the output to the console.
 
 ![yaml-to-struct.png](image/yaml-to-struct.png)
 

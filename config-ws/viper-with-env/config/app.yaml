@@ -12,10 +12,10 @@ server:
 database:
     sqlite:
         driver: sqlite3
-        dsn: test_dbase.sqlite
+        dsn: ${SQLITE_DSN}
     postgres:
         driver: postgres
-        dsn: user=postgres password=mysecretpassword host=localhost port=5432 dbname=pet_clinic sslmode=disable
+        dsn: ${POSTGRES_DSN}
     maxIdleConns: 1
     maxOpenConns: 5
     maxIdleTime: 60
