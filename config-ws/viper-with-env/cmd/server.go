@@ -20,7 +20,7 @@ func loadConfig() {
 func main() {
 	loadConfig()
 	log.Debug().Any("server", app.Config.Server).Msg("Server Config")
-	log.Debug().Any("appInfo", app.Config.AppInfo).Msg("App Version")
+	log.Debug().Any("appInfo", app.Config.Info).Msg("App Version")
 	log.Debug().Any("sqlite", app.Config.Database.Sqlite).Msg("SQLite Config")
 	log.Debug().Any("postgres", app.Config.Database.Postgres).Msg("Postgres Config")
 }

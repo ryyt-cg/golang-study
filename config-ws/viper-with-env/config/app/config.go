@@ -16,7 +16,7 @@ var (
 )
 
 type appConfig struct {
-	AppInfo  AppInfoConfig
+	Info     InfoConfig
 	Database DatabaseConfig
 	Server   ServerConfig
 }
@@ -25,7 +25,7 @@ type appConfig struct {
 func (config appConfig) Validate() error {
 	validate = validator.New(validator.WithRequiredStructEnabled())
 
-	if err := validate.Struct(config.AppInfo); err != nil {
+	if err := validate.Struct(config.Info); err != nil {
 		panic(err.Error())
 	}
 	if err := validate.Struct(config.Database); err != nil {

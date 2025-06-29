@@ -1,5 +1,5 @@
 # app info
-appInfo:
+info:
     name: "Viper Config Example"
     description: "Viper configuration example for a Go application with environment variables"
     version: "1.0.0"
