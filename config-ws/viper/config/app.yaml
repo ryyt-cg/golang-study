@@ -1,13 +1,13 @@
 # app info
 appInfo:
-    name: "Pet Clinic"
-    description: "Golang Pet Clinic Service"
+    name: "Viper Config Example"
+    description: "Viper configuration example for a Go application"
     version: "1.0.0"
 
 # server port
 server:
     host: localhost
-    httpPort: ":8443"
+    httpPort: ":8080"
 
 database:
     sqlite:

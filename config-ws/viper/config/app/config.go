@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
-	//_ "github.com/joho/godotenv/autoload"
 	"github.com/spf13/viper"
 	"os"
 	"strings"
@@ -55,19 +54,7 @@ func LoadConfig(configPaths ...string) error {
 		return err
 	}
 
-	loadEnv()
 	return Config.Validate()
-}
-
-func loadEnv() error {
-	viper.SetConfigFile(".env")
-	if err := viper.ReadInConfig(); err != nil {
-		return fmt.Errorf("fail to read the .env file: %s", err)
-	}
-
-	Config.Database.Sqlite.Dsn = viper.GetString("SQLITE_DSN")
-	Config.Database.Postgres.Dsn = viper.GetString("POSTGRES_DSN")
-	return nil
 }
 
 func getConfigFile(env string) string {

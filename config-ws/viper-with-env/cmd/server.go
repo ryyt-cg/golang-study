@@ -8,7 +8,7 @@ import (
 
 func loadConfig() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	log.Info().Msg("viper example starts")
+	log.Info().Msg("viper with env example starts")
 
 	// load application configurations
 	if err := app.LoadConfig("./config"); err != nil {

@@ -55,10 +55,14 @@ func LoadConfig(configPaths ...string) error {
 		return err
 	}
 
-	loadEnv()
+	if err := loadEnv(); err != nil {
+		return fmt.Errorf("fail to load environment variables: %s", err)
+	}
+
 	return Config.Validate()
 }
 
+// loadEnv loads environment variables from the .env file.
 func loadEnv() error {
 	viper.SetConfigFile(".env")
 	if err := viper.ReadInConfig(); err != nil {
