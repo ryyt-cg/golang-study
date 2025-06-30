@@ -10,7 +10,7 @@ type DatabaseConfig struct {
 
 type PostgresConfig struct {
 	Driver string `validate:"required"`
-	Dsn    string `validate:"required" ,mapstructure:"POSTGRES_DSN"` // Data Source Name
+	Dsn    string `validate:"required",mapstructure:"POSTGRES_DSN"` // Data Source Name
 }
 
 type SqliteConfig struct {

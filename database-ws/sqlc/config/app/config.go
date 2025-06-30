@@ -22,7 +22,7 @@ type appConfig struct {
 }
 
 // Validate all config required values are populated.
-func (config appConfig) validate() error {
+func (config appConfig) Validate() error {
 	validate = validator.New(validator.WithRequiredStructEnabled())
 
 	if err := validate.Struct(config.Info); err != nil {
@@ -55,19 +55,11 @@ func LoadConfig(configPaths ...string) error {
 		return err
 	}
 
-	// Load environment variables from .env file
 	if err := loadEnv(); err != nil {
 		return fmt.Errorf("fail to load environment variables: %s", err)
 	}
 
-	// TODO
-	// will use reflect package to scan the Config struct
-	// and replace any attributes's value that has prefix ${
-	// and suffix } with the environment variable value
-	replaceWithEnv(&Config.Database.Postgres.Dsn)
-	replaceWithEnv(&Config.Database.Sqlite.Dsn)
-
-	return Config.validate()
+	return Config.Validate()
 }
 
 // loadEnv loads environment variables from the .env file.
@@ -77,20 +69,9 @@ func loadEnv() error {
 		return fmt.Errorf("fail to read the .env file: %s", err)
 	}
 
+	Config.Database.Sqlite.Dsn = viper.GetString("SQLITE_DSN")
+	Config.Database.Postgres.Dsn = viper.GetString("POSTGRES_DSN")
 	return nil
-}
-
-// replaceConfigFile replaces the configuration file name based on the environment variable.
-func replaceWithEnv(attr *string) {
-	if strings.HasPrefix(*attr, "${") && strings.HasSuffix(*attr, "}") {
-		envVar := (*attr)[2 : len(*attr)-1]
-		*attr = viper.GetString(envVar)
-	}
-
-	//if strings.HasPrefix(Config.Database.Postgres.Dsn, "${") && strings.HasSuffix(Config.Database.Postgres.Dsn, "}") {
-	//	envVar := Config.Database.Postgres.Dsn[2 : len(Config.Database.Postgres.Dsn)-1]
-	//	Config.Database.Postgres.Dsn = viper.GetString(envVar)
-	//}
 }
 
 func getConfigFile(env string) string {

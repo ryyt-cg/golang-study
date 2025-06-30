@@ -25,14 +25,6 @@ Viper is a complete configuration solution for Go applications.
 ## Demo
 This module demonstrates the Viper reading yaml configuration file and environment variables (env).  There are some sensitive, secret values that are not allowed to check into github such as database credential, API key, etc. To protect them, they require to store in env file, Hashicorp Consul, etcd3, aws parameter store, etc.  In this example, I will use Viper to read .env file. The ${SQLITE_DSN} and ${POSTGRES_DSN} are replaced with the values with these keys, SQLITE_DSN and POSTGRES_DSN. Print out the output to the console.
 
-Steps to handle the configuration:
-1. Read the configuration file (yaml)
-2. Read environment variables (env).
-3. Scan all attributes' value starting with ${}.
-4. Replace them with the value from the environment variables.
-5. Validate the configuration.
-6. Print out the configuration.
-
 |                                                                              |                                                                |
 |------------------------------------------------------------------------------|----------------------------------------------------------------|
 | <img title="yaml file" src="image/yaml-file.png" alt="yaml file" width=300 > | <img title="env file" src="image/env-file.png" alt="env file"> |
