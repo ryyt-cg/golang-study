@@ -13,6 +13,7 @@ func init() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 }
 
+// This example shows how to load environment variables from a .env file.
 func main() {
 	//err := godotenv.Load()
 	//if err != nil {

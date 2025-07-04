@@ -19,7 +19,7 @@ Viper is a complete configuration solution for Go applications.
 │   ├── app-prd.yaml
 │   └── app.yaml                                // Default application configuration file
 ├── go.sum
-└── .env
+└── .env-example
 ```
 
 ## Demo
@@ -30,8 +30,7 @@ Steps to handle the configuration:
 2. Read environment variables (env).
 3. Scan all attributes' value starting with ${}.
 4. Replace them with the value from the environment variables.
-5. Validate the configuration.
-6. Print out the configuration.
+5. Print out the configuration.
 
 |                                                                              |                                                                |
 |------------------------------------------------------------------------------|----------------------------------------------------------------|
