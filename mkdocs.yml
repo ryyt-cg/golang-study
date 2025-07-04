@@ -1,7 +1,7 @@
 site_name: Goland Study Note
 nav:
   - Home: index.md
-  - App Config: app-config.md
+  - App Config: app-configuration.md
 theme:
   name: material
   features:
