@@ -1,8 +1,0 @@
-# postgres
-database:
-    postgres:
-        driver: postgres
-        dsn: "user=esub password=esub host=localhost port=5432 dbname=esub sslmode=disable"
-    maxIdleConns: 0
-    maxOpenConns: 5
-    maxIdleTime: 60
