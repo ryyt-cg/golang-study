@@ -3,6 +3,8 @@ package app
 import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
+	"reflect"
+
 	//_ "github.com/joho/godotenv/autoload"
 	"github.com/spf13/viper"
 	"os"
@@ -64,10 +66,50 @@ func LoadConfig(configPaths ...string) error {
 	// will use reflect package to scan the Config struct
 	// and replace any attributes's value that has prefix ${
 	// and suffix } with the environment variable value
-	replaceWithEnv(&Config.Database.Postgres.Dsn)
-	replaceWithEnv(&Config.Database.Sqlite.Dsn)
+	//replaceWithEnv(&Config.Database.Postgres.Dsn)
+	//replaceWithEnv(&Config.Database.Sqlite.Dsn)
+
+	fields, _ := listStructKeys(Config)
+	for _, field := range fields {
+		if v.IsSet(field) {
+			value := v.GetString(field)
+			if strings.HasPrefix(value, "${") && strings.HasSuffix(value, "}") {
+				envVar := value[2 : len(value)-1]
+				v.Set(field, v.GetString(envVar))
+			}
+		}
+	}
 
 	return Config.validate()
+}
+
+func listStructKeys(s interface{}) ([]string, error) {
+	// Recursively get the config struct tag mapstructure
+	keys := []string{}
+	ct := reflect.TypeOf(s)
+
+	if ct.Kind() != reflect.Struct {
+		return nil, fmt.Errorf("listStructKeys: %v is not a struct", ct)
+	}
+
+	for i := range ct.NumField() {
+		field := ct.Field(i)
+		tag := field.Tag.Get("mapstructure")
+
+		if field.Type.Kind() == reflect.Struct {
+			res, err := listStructKeys(reflect.New(field.Type).Elem().Interface())
+			if err != nil {
+				return nil, err
+			}
+			for _, k := range res {
+				keys = append(keys, fmt.Sprintf("%s.%s", tag, k))
+			}
+		} else {
+			keys = append(keys, tag)
+		}
+	}
+
+	return keys, nil
 }
 
 // loadEnv loads environment variables from the .env file.

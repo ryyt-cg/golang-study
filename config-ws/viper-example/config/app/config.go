@@ -36,7 +36,6 @@ func (config appConfig) Validate() error {
 
 // LoadConfig loads configuration from the given list of paths and populates it into the Config variable.
 // The configuration file(s) should be named as app.yaml.
-// Environment variables with the prefix "NGEN_" in their names are also read automatically.
 func LoadConfig(configPaths ...string) error {
 	v := viper.New()
 	v.SetConfigType("yaml")
