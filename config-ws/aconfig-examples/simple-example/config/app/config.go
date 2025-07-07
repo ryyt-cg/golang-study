@@ -2,26 +2,26 @@ package app
 
 import (
 	"fmt"
+	"github.com/cristalhq/aconfig"
 	"github.com/go-playground/validator/v10"
-	"github.com/spf13/viper"
 	"os"
 	"strings"
 )
 
 // Config stores the application-wide configurations
 var (
-	Config   appConfig
+	Config   AppConfig
 	validate *validator.Validate
 )
 
-type appConfig struct {
-	AppInfo  AppInfoConfig
-	Database DatabaseConfig
-	Server   ServerConfig
+type AppConfig struct {
+	AppInfo  AppInfoConfig  `json:"appInfo" validate:"required"`
+	Database DatabaseConfig `json:"database" validate:"required"`
+	Server   ServerConfig   `json:"server" validate:"required"`
 }
 
 // Validate all config required values are populated.
-func (config appConfig) Validate() error {
+func (config AppConfig) Validate() error {
 	validate = validator.New(validator.WithRequiredStructEnabled())
 
 	if err := validate.Struct(config.AppInfo); err != nil {
@@ -36,22 +36,16 @@ func (config appConfig) Validate() error {
 
 // LoadConfig loads configuration from the given list of paths and populates it into the Config variable.
 // The configuration file(s) should be named as app.yaml.
-// Environment variables with the prefix "NGEN_" in their names are also read automatically.
-func LoadConfig(configPaths ...string) error {
-	v := viper.New()
-	v.SetConfigType("yaml")
-	v.AutomaticEnv()
+func LoadConfig(configPath string) error {
 	env := strings.ToUpper(os.Getenv("ENV"))
-	v.SetConfigName(getConfigFile(env))
+	configFile := configPath + "/" + getConfigFile(env) + ".json"
 
-	for _, path := range configPaths {
-		v.AddConfigPath(path)
-	}
-	if err := v.ReadInConfig(); err != nil {
-		return fmt.Errorf("fail to read the configuration file: %s", err)
-	}
-	if err := v.Unmarshal(&Config); err != nil {
-		return err
+	loader := aconfig.LoaderFor(&Config, aconfig.Config{
+		SkipFlags: true,
+		Files:     []string{configFile},
+	})
+	if err := loader.Load(); err != nil {
+		return fmt.Errorf("failed to load configuration file %s: %w", configFile, err)
 	}
 
 	return Config.Validate()

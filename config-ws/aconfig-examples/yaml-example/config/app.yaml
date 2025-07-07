@@ -1,21 +1,21 @@
 # app info
-appInfo:
-    name: "Viper Config Example"
+sppInfo:
+    name: "aConfig Example"
     description: "Viper configuration example for a Go application"
     version: "1.0.0"
 
 # server port
 server:
     host: localhost
-    httpPort: ":8080"
+    httpPort: ":8090"
 
 database:
     sqlite:
         driver: sqlite3
-        dsn: test_dbase.sqlite
+        dsn: ${SQLITE_DSN}
     postgres:
         driver: postgres
-        dsn: user=postgres password=mysecretpassword host=localhost port=5432 dbname=pet_clinic sslmode=disable
+        dsn: ${POSTGRES_DSN}
     maxIdleConns: 1
     maxOpenConns: 5
     maxIdleTime: 60

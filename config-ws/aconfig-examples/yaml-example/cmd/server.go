@@ -3,15 +3,15 @@ package main
 import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"viper/config/app"
+	"yml-example/config/app"
 )
 
 func loadConfig() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	log.Info().Msg("viper example starts")
+	log.Info().Msg("aconfig with env example starts")
 
 	// load application configurations
-	if err := app.LoadConfig("./config"); err != nil {
+	if err := app.LoadConfig("../config"); err != nil {
 		log.Fatal().Err(err).
 			Msg("Fail to load application configuration.")
 	}

@@ -2,8 +2,9 @@ package app
 
 import (
 	"fmt"
+	"github.com/cristalhq/aconfig"
+	"github.com/cristalhq/aconfig/aconfigyaml"
 	"github.com/go-playground/validator/v10"
-	"github.com/spf13/viper"
 	"os"
 	"strings"
 )
@@ -15,9 +16,9 @@ var (
 )
 
 type AppConfig struct {
-	AppInfo  AppInfoConfig
-	Database DatabaseConfig
-	Server   ServerConfig
+	AppInfo  AppInfoConfig  `yaml:"appInfo" validate:"required"`
+	Database DatabaseConfig `yaml:"database" validate:"required"`
+	Server   ServerConfig   `yaml:"server" validate:"required"`
 }
 
 // Validate all config required values are populated.
@@ -36,22 +37,20 @@ func (config AppConfig) Validate() error {
 
 // LoadConfig loads configuration from the given list of paths and populates it into the Config variable.
 // The configuration file(s) should be named as app.yaml.
-// Environment variables with the prefix "NGEN_" in their names are also read automatically.
-func LoadConfig(configPaths ...string) error {
-	v := viper.New()
-	v.SetConfigType("yaml")
-	v.AutomaticEnv()
+func LoadConfig(configPath string) error {
 	env := strings.ToUpper(os.Getenv("ENV"))
-	v.SetConfigName(getConfigFile(env))
+	configFile := configPath + "/" + getConfigFile(env) + ".json"
+	fmt.Println(configFile)
 
-	for _, path := range configPaths {
-		v.AddConfigPath(path)
-	}
-	if err := v.ReadInConfig(); err != nil {
-		return fmt.Errorf("fail to read the configuration file: %s", err)
-	}
-	if err := v.Unmarshal(&Config); err != nil {
-		return err
+	loader := aconfig.LoaderFor(&Config, aconfig.Config{
+		SkipFlags: true,
+		Files:     []string{"./config/application.yaml"},
+		FileDecoders: map[string]aconfig.FileDecoder{
+			".yaml": aconfigyaml.New(), // Register the YAML decoder
+		},
+	})
+	if err := loader.Load(); err != nil {
+		return fmt.Errorf("failed to load configuration file %s: %w", configFile, err)
 	}
 
 	return Config.Validate()
