@@ -1,3 +1,0 @@
-# server port
-server:
-  httpPort: ":8090"
