@@ -1,6 +1,6 @@
-sppInfo:
+appInfo:
     name: "aConfig Example"
-    description: "Viper configuration example for a Go application"
+    description: "Simple aconfig example for a Go application"
     version: "1.0.0"
 
 server:

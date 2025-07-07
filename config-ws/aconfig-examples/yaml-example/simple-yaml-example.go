@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/cristalhq/aconfig"
 	"github.com/cristalhq/aconfig/aconfigyaml"
-	"log"
+	"github.com/rs/zerolog/log"
 	"os"
 )
 
@@ -32,11 +32,10 @@ func main() {
 		},
 	})
 	if err := loader.Load(); err != nil {
-		log.Panic(err)
+		log.Panic().Err(err).Msg("Fail to load application configuration.")
 	}
 
 	fmt.Printf("HTTPPort:  %v\n", cfg.HTTPPort)
 	fmt.Printf("Auth.User: %v\n", cfg.Auth.User)
 	fmt.Printf("Auth.Pass: %v\n", cfg.Auth.Pass)
-
 }
