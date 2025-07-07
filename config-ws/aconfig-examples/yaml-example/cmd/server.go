@@ -11,7 +11,7 @@ func loadConfig() {
 	log.Info().Msg("aconfig with env example starts")
 
 	// load application configurations
-	if err := app.LoadConfig("../config"); err != nil {
+	if err := app.LoadConfig("./config"); err != nil {
 		log.Fatal().Err(err).
 			Msg("Fail to load application configuration.")
 	}

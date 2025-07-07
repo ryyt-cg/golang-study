@@ -39,12 +39,12 @@ func (config AppConfig) Validate() error {
 // The configuration file(s) should be named as app.yaml.
 func LoadConfig(configPath string) error {
 	env := strings.ToUpper(os.Getenv("ENV"))
-	configFile := configPath + "/" + getConfigFile(env) + ".json"
+	configFile := configPath + "/" + getConfigFile(env) + ".yaml"
 	fmt.Println(configFile)
 
 	loader := aconfig.LoaderFor(&Config, aconfig.Config{
 		SkipFlags: true,
-		Files:     []string{"./config/application.yaml"},
+		Files:     []string{configFile},
 		FileDecoders: map[string]aconfig.FileDecoder{
 			".yaml": aconfigyaml.New(), // Register the YAML decoder
 		},

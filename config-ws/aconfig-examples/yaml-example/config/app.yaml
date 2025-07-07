@@ -1,10 +1,8 @@
-# app info
 sppInfo:
     name: "aConfig Example"
     description: "Viper configuration example for a Go application"
     version: "1.0.0"
 
-# server port
 server:
     host: localhost
     httpPort: ":8090"
