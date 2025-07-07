@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"os"
 	"viper/config/app"
 )
 
@@ -18,6 +19,8 @@ func loadConfig() {
 }
 
 func main() {
+	os.Setenv("POSTGRES_DSN", "postgres")
+
 	loadConfig()
 	log.Debug().Any("server", app.Config.Server).Msg("Server Config")
 	log.Debug().Any("appInfo", app.Config.AppInfo).Msg("App Version")
