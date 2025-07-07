@@ -1,7 +1,0 @@
-{
-  "httpPort": 4444,
-  "auth": {
-    "user": "admin",
-    "pass": "strong-password"
-  }
-}
