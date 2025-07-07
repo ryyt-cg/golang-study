@@ -1,0 +1,19 @@
+appInfo:
+    name: "aConfig Example"
+    description: "Simple aconfig example for a Go application"
+    version: "1.0.0"
+
+server:
+    host: localhost
+    httpPort: ":8090"
+
+database:
+    sqlite:
+        driver: sqlite3
+        dsn: ${SQLITE_DSN}
+    postgres:
+        driver: postgres
+        dsn: ${POSTGRES_DSN}
+    maxIdleConns: 1
+    maxOpenConns: 5
+    maxIdleTime: 60

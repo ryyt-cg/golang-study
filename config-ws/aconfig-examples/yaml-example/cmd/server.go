@@ -3,13 +3,12 @@ package main
 import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"os"
-	"viper/config/app"
+	"yml-example/config/app"
 )
 
 func loadConfig() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	log.Info().Msg("viper example starts")
+	log.Info().Msg("aconfig with env example starts")
 
 	// load application configurations
 	if err := app.LoadConfig("./config"); err != nil {
@@ -19,8 +18,6 @@ func loadConfig() {
 }
 
 func main() {
-	os.Setenv("POSTGRES_DSN", "postgres")
-
 	loadConfig()
 	log.Debug().Any("server", app.Config.Server).Msg("Server Config")
 	log.Debug().Any("appInfo", app.Config.AppInfo).Msg("App Version")
