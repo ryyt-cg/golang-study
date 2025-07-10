@@ -4,6 +4,15 @@ Application configuration is an essential part of any software project. In Go, c
 ## [aconfig](https://github.com/cristalhq/aconfig)
 Aconfig is a simple and powerful configuration library for Go. It supports various formats like JSON, YAML, TOML, and more. Aconfig allows you to define your configuration structure using Go structs and automatically maps the configuration values to the struct fields.
 
+### Features:
+* Automatic fields mapping.
+* Supports different sources:
+    * defaults in the code
+    * files (JSON, YAML, TOML, DotENV, HCL)
+    * environment variables
+    * command-line flags
+* dependency-free (file parsers are optional).
+
 ## [godotenv](https://github.com/joho/godotenv)
 
 ## [Viper](https://github.com/spf13/viper)

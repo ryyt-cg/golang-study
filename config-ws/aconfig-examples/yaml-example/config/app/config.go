@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"github.com/cristalhq/aconfig"
+	"github.com/cristalhq/aconfig/aconfigtoml"
 	"github.com/cristalhq/aconfig/aconfigyaml"
 	"github.com/go-playground/validator/v10"
 	"os"
@@ -47,6 +48,7 @@ func LoadConfig(configPath string) error {
 		Files:     []string{configFile},
 		FileDecoders: map[string]aconfig.FileDecoder{
 			".yaml": aconfigyaml.New(), // Register the YAML decoder
+			".toml": aconfigtoml.New(), // Register the TOML decoder
 		},
 	})
 	if err := loader.Load(); err != nil {

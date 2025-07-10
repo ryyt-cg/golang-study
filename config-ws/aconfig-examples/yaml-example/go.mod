@@ -4,12 +4,14 @@ go 1.24.4
 
 require (
 	github.com/cristalhq/aconfig v0.19.0
+	github.com/cristalhq/aconfig/aconfigtoml v0.17.1
 	github.com/cristalhq/aconfig/aconfigyaml v0.17.1
 	github.com/go-playground/validator/v10 v10.27.0
 	github.com/rs/zerolog v1.34.0
 )
 
 require (
+	github.com/BurntSushi/toml v1.1.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect

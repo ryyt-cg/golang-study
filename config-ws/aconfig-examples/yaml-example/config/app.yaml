@@ -1,6 +1,6 @@
 appInfo:
     name: "aConfig Example"
-    description: "Simple aconfig example for a Go application"
+    description: "yaml aconfig example for a Go application"
     version: "1.0.0"
 
 server:

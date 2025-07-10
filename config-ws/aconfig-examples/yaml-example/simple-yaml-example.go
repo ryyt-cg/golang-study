@@ -11,8 +11,8 @@ import (
 type MyConfig struct {
 	HTTPPort int `yaml:"httpPort"`
 	Auth     struct {
-		User string `yaml:"user" validate:"required"` // Default value if not set
-		Pass string `yaml:"pass" validate:"required"` // Default value if not set
+		User string `validate:"required"` // Default value if not set
+		Pass string `validate:"required"` // Default value if not set
 	}
 }
 
