@@ -3,11 +3,14 @@ package main
 import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"os"
 	"yml-example/config/app"
 )
 
 func loadConfig() {
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	// zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	// Configure the logger to use ConsoleWriter for pretty console output
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
 	log.Info().Msg("aconfig with env example starts")
 
 	// load application configurations

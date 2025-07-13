@@ -8,7 +8,9 @@ import (
 )
 
 func loadConfig() {
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	// Configure the logger to use ConsoleWriter for pretty console output
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
+
 	log.Info().Msg("aconfig with env example starts")
 
 	// load application configurations
@@ -21,8 +23,8 @@ func loadConfig() {
 func main() {
 	// Set environment variables for testing
 	// In a real application, these would be set in the environment or through a configuration management system.
-	os.Setenv("DATABASE_POSTGRES_DSN", "env-postgres-dsn")
-	os.Setenv("DATABASE_SQLITE_DSN", "env-sqlite-dsn")
+	//os.Setenv("DATABASE_POSTGRES_DSN", "env-postgres-dsn")
+	//os.Setenv("DATABASE_SQLITE_DSN", "env-sqlite-dsn")
 	defer os.Clearenv()
 
 	loadConfig()

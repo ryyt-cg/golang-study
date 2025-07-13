@@ -8,9 +8,11 @@ import (
 	"strings"
 )
 
-// Config stores the application-wide configurations
 var (
-	Config   AppConfig
+	// Config stores the application-wide configurations
+	Config AppConfig
+	// validator is used to validate the configuration values
+	// only visible within this package.
 	validate *validator.Validate
 )
 

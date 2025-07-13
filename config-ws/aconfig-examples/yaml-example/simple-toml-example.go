@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 	"github.com/cristalhq/aconfig"
-	"github.com/cristalhq/aconfig/aconfigyaml"
+	"github.com/cristalhq/aconfig/aconfigtoml"
 	"github.com/rs/zerolog/log"
 	"os"
 )
 
 type MyConfig struct {
-	HTTPPort int `yaml:"httpPort"`
+	HTTPPort int `toml:"httpPort"`
 	Auth     struct {
 		User string `validate:"required"` // Default value if not set
 		Pass string `validate:"required"` // Default value if not set
@@ -26,9 +26,9 @@ func main() {
 	loader := aconfig.LoaderFor(&cfg, aconfig.Config{
 		SkipFlags: true,
 		EnvPrefix: "EXAMPLE",
-		Files:     []string{"config/example_config.yaml"},
+		Files:     []string{"config/example_config.toml"},
 		FileDecoders: map[string]aconfig.FileDecoder{
-			".yaml": aconfigyaml.New(), // Register the YAML decoder
+			".toml": aconfigtoml.New(), // Register the YAML decoder
 		},
 	})
 	if err := loader.Load(); err != nil {

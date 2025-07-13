@@ -17,8 +17,7 @@
       "driver": "postgres",
       "dsn": "${POSTGRES_DSN}"
     },
-    "maxIdleConns": 1,
-    "maxOpenConns": 5,
-    "maxIdleTime": 60
+    "max_idle_conns": 1,
+    "max_open_conns": 5
   }
 }
