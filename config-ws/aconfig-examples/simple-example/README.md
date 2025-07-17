@@ -13,7 +13,7 @@ In  this example, these sources are used:
 * environment variables
 
 Project structure:
-```
+```plaintext
 ├── README.md
 ├── config
 │   ├── app
@@ -45,7 +45,7 @@ type DatabaseConfig struct {
 ```
 
 JSON configuration file will look like this:
-MaxIdleTime is not specified, so it will use the default value of 30 seconds.
+- MaxIdleTime is not specified, so it will use the default value of 30 seconds.
 
 ```json
 {

@@ -9,8 +9,8 @@ import (
 )
 
 func init() {
-	// UNIX Time is faster and smaller than most timestamps
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
+	log.Info().Msg("godotenv example starts")
 }
 
 // This example shows how to load environment variables from a .env file.

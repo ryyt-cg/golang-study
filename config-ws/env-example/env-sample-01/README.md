@@ -8,6 +8,8 @@ go get github.com/joho/godotenv
 
 ## Usage
 1. create a `.env` file in your project root directory with key-value pairs:
+   - KEY_NAME=value
+   - ANOTHER_KEY=another_value
 2. import the package in your Go code:
 ```go
    "github.com/joho/godotenv"

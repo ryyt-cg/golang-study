@@ -1,0 +1,11 @@
+version: "2"
+sql:
+  - engine: "sqlite"
+    queries:
+      - "query/author.sql"
+      - "query/book.sql"
+    schema: "schema.sql"
+    gen:
+      go:
+        package: "sqlgen"
+        out: "sqlgen"
