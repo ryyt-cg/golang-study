@@ -105,3 +105,15 @@ func (repo *AuthorRepository) Delete(id int64) error {
 
 	return nil
 }
+
+// Count the number of authors
+func (repo *AuthorRepository) Count() (int64, error) {
+	log.Printf("count authors\n")
+	count, err := repo.queries.CountAuthors(repo.ctx)
+	if err != nil {
+		log.Printf("fails to count authors, err: %v\n", err.Error())
+		return 0, err
+	}
+
+	return count, nil
+}

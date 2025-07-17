@@ -67,4 +67,11 @@ func main() {
 		log.Printf("error: %v\n", err)
 	}
 	log.Printf("authors: %v\n", books)
+
+	// Author counts
+	authorCount, err := authorRepository.Count()
+	if err != nil {
+		log.Printf("error: %v\n", err)
+	}
+	log.Printf("author count: %d\n", authorCount)
 }

@@ -1,9 +1,13 @@
-# handling-migration
-## Getting Started
-1. Create handling-migration directory
-2. In the get-started directory, create a new Go module
-3. Add the sqlc tool to the Go module
-4. Create a new sqlc.yaml or sqlc.json file
+# Handling SQL migrations
+sqlc does not perform database migrations for you. However, sqlc is able to differentiate between up and down migrations. sqlc ignores down migrations when parsing SQL files.
+
+sqlc supports parsing migrations from the following tools:
+* atlas
+* dbmate
+* golang-migrate
+* goose
+* sql-migrate
+* tern
 
 ```bash
 mkdir handling-migration
@@ -14,17 +18,21 @@ go get github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 The sqlc.yaml and sqlc.json are the configuration for sqlc generate.  It composes of:
 sqlc version, sql engine, queries, package directory, out directory, etc.  For example:
 
+
+In this example, sqlc refers schema files from the `migrations` directory, which contains SQL migration files. The queries are defined in the `query` directory, and the generated code will be placed in the `sqlgen` directory.
+
 ```yaml
 version: "2"
 sql:
-  - engine: "postgresql"
-    queries: "query.sql"
-    schema: "schema.sql"
+  - engine: "sqlite"
+    queries:
+      - "query/author.sql"
+      - "query/book.sql"
+    schema: "../../migrations"
     gen:
       go:
-        package: "tutorial"
-        out: "tutorial"
-        sql_package: "pgx/v5"
+        package: "sqlgen"
+        out: "sqlgen"
 ```
 
 ## Project Structure
@@ -44,7 +52,6 @@ sql:
 │   │   ├── query
 │   │   │   ├── author.sql
 │   │   │   └── book.sql
-│   │   ├── schema.sql
 │   │   ├── sqlc.yaml
 │   │   ├── sqlgen
 │   │   │   ├── author.sql.go
@@ -57,6 +64,7 @@ sql:
 │       └── book_repository.go
 └── sqlc-tutorial.sqlite
 ```
+
 ## Create sqlite database
 Use goose (database migration tool) to create the sqlc-tutorial.sqlite database.
 ```bash
