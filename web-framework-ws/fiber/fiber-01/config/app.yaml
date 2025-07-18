@@ -1,0 +1,10 @@
+appInfo:
+    name: "Go Fiber App"
+    description: "Use Go Fiber to build a web application"
+    version: "1.0.0"
+
+server:
+    baseURL: "/api/gof"
+    host: localhost
+    httpPort: ":8090"
+
