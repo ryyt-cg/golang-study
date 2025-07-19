@@ -32,5 +32,6 @@ func (infoRouter *Router) appInfo(c *fiber.Ctx) error {
 		}
 	}
 
+	// Content-Type will be application/json by c.JSON
 	return c.JSON(result)
 }

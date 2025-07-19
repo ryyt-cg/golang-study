@@ -30,6 +30,14 @@ func loadConfig() {
 
 	// Create a new Fiber instance
 	fiberApp = fiber.New()
+
+	// Middleware for Enforcing Accept only application/json requests
+	fiberApp.Use(func(c *fiber.Ctx) error {
+		if offer := c.Accepts(fiber.MIMEApplicationJSON); offer == "" {
+			return c.Status(fiber.StatusNotAcceptable).SendString("Only application/json is accepted.")
+		}
+		return c.Next()
+	})
 	// Apply global middlewares
 	fiberApp.Use(healthcheck.New())
 	fiberApp.Use(recover.New())   // Recover from panics and continue

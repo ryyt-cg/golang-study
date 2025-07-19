@@ -90,6 +90,44 @@ app.Get("/user/:id", func(c *fiber.Ctx) error {
 })
 ```
 
+### Queries
+Queries is a function that returns an object containing a property for each query string parameter in the route.<br/>
+Signature:
+```go
+func (c *Ctx) Queries() map[string]string
+```
+Example:
+```go
+// GET http://example.com/?name=alex&want_pizza=false&id=
+app.Get("/", func(c *fiber.Ctx) error {
+m := c.Queries()
+m["name"] // "alex"
+m["want_pizza"] // "false"
+m["id"] // ""
+// ...
+})
+````
+
+### Query
+This property is an object containing a property for each query string parameter in the route, you could pass an optional default value that will be returned if the query key does not exist.
+
+Signature:
+```go
+func (c *Ctx) Query(key string, defaultValue ...string) string
+```
+Example:
+```go
+// GET http://example.com/?order=desc&brand=nike
+
+app.Get("/", func(c *fiber.Ctx) error {
+c.Query("order")         // "desc"
+c.Query("brand")         // "nike"
+c.Query("empty", "nike") // "nike"
+
+// ...
+})
+````
+There are other query methods: QueryInt, QueryBool, QueryFloat.
 
 
 
