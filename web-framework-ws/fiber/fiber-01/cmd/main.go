@@ -4,8 +4,10 @@ import (
 	"fiber-01/api/author"
 	"fiber-01/api/info"
 	"fiber-01/config/app"
+	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/rs/zerolog"
@@ -28,8 +30,29 @@ func loadConfig() {
 			Msg("Fail to load application configuration.")
 	}
 
+	// Set the log level based on the configuration
+	switch app.Config.Server.LogLevel {
+	case "debug":
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	case "info":
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	case "warn":
+		zerolog.SetGlobalLevel(zerolog.WarnLevel)
+	case "error":
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+	default:
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	}
 	// Create a new Fiber instance
 	fiberApp = fiber.New()
+
+	prometheus := fiberprometheus.New("fiber-01")
+	prometheus.RegisterAt(fiberApp, app.Config.Server.BaseURL+"/metrics")
+	prometheus.SetSkipPaths([]string{"/ping"}) // Optional: Remove some paths from metrics
+	fiberApp.Use(prometheus.Middleware)
+
+	// Monitor
+	fiberApp.Get(app.Config.Server.BaseURL+"/monitor", monitor.New(monitor.Config{Title: "fiber-01 Monitor"}))
 
 	// Middleware for Enforcing Accept only application/json requests
 	fiberApp.Use(func(c *fiber.Ctx) error {

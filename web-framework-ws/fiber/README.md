@@ -1,6 +1,40 @@
 
 
 
+### Fiber Prometheus
+Install v2, it is planning to migrate to the official gofiber/contrib repository in near future.
+```bash
+go get -u github.com/gofiber/fiber/v2
+go get -u github.com/ansrivas/fiberprometheus/v2
+````
+Example:
+```go
+app := fiber.New()
+
+// This here will appear as a label, one can also use
+// fiberprometheus.NewWith(servicename, namespace, subsystem )
+// or
+// labels := map[string]string{"custom_label1":"custom_value1", "custom_label2":"custom_value2"}
+// fiberprometheus.NewWithLabels(labels, namespace, subsystem )
+prometheus := fiberprometheus.New("my-service-name")
+prometheus.RegisterAt(app, "/metrics")
+prometheus.SetSkipPaths([]string{"/ping"}) // Optional: Remove some paths from metrics
+prometheus.SetIgnoreStatusCodes([]int{401, 403, 404}) // Optional: Skip metrics for these status codes
+app.Use(prometheus.Middleware)
+````
+
+### Monitor
+Monitor middleware for Fiber that reports server metrics, inspired by express-status-monitor<br/>
+Install:
+```bash
+go get -u github.com/gofiber/fiber/v3
+go get -u github.com/gofiber/contrib/monitor
+```
+Signature:
+```go
+monitor.New(config ...monitor.Config) fiber.Handler
+````
+`
 
 
 
@@ -130,9 +164,6 @@ c.Query("empty", "nike") // "nike"
 There are other query methods: QueryInt, QueryBool, QueryFloat.
 
 
-
-
-
 ## Client
 Start a http request with http method and url.<br/>
 Signature:
@@ -150,3 +181,8 @@ func (c *Client) Delete(url string) *Agent
 Agent is built on top of FastHTTP's HostClient which has lots of convenient helper methods such as dedicated methods for request methods.
 
  
+
+
+
+
+

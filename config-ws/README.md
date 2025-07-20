@@ -13,6 +13,9 @@ Aconfig is a simple and powerful configuration library for Go. It supports vario
     * command-line flags
 * dependency-free (file parsers are optional).
 
+Two examples of using Aconfig are provided below:
+* [Aconfig Example](config-ws/aconfig-examples/simple-example/README.md)
+* [YAML File Example](config-ws/aconfig-examples/yaml-example/README.md)
 
 ## [godotenv](https://github.com/joho/godotenv)
 dotenv is a Go library that allows you to load environment variables from a `.env` file into your Go application. This is particularly useful for managing configuration settings in a development environment without hardcoding them into your source code.

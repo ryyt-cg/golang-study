@@ -3,6 +3,7 @@ package author
 import (
 	"errors"
 	"fiber-01/exception"
+	resterr "fiber-01/pkg/errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
 	"net/url"
@@ -29,12 +30,11 @@ func (authorRouter *Router) Register(router fiber.Router) {
 
 // authorByID fetches an author by ID
 func (authorRouter *Router) authorByID(c *fiber.Ctx) error {
+	log.Info().Str("id", c.Params("id")).Msg("GET author by ID")
 	id, err := c.ParamsInt("id")
 	if err != nil {
 		log.Error().Err(err).Str("id", c.Params("id")).Msg("Invalid author ID")
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid author ID",
-		})
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	log.Debug().Int("ID", id).Msg("Fetching author by ID")
@@ -42,15 +42,12 @@ func (authorRouter *Router) authorByID(c *fiber.Ctx) error {
 	if err != nil {
 		if errors.Is(err, exception.ErrorNotFound) {
 			log.Warn().Int("ID", id).Msg("Author not found by ID")
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-				"error": "Author not found",
-			})
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
 		}
 
 		log.Error().Err(err).Msg("Failed to fetch author by ID")
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to fetch author",
-		})
+		return c.Status(fiber.StatusInternalServerError).JSON(
+			resterr.InternalServerError("Failed to fetch author by ID"))
 	}
 
 	return c.JSON(result)
@@ -59,6 +56,7 @@ func (authorRouter *Router) authorByID(c *fiber.Ctx) error {
 // authorByName fetches an author by name
 func (authorRouter *Router) authorByName(c *fiber.Ctx) error {
 	name := c.Params("name")
+	log.Info().Str("name", name).Msg("GET author by name")
 	return funcName(c, name, authorRouter)
 }
 
@@ -66,6 +64,7 @@ func (authorRouter *Router) authorByName(c *fiber.Ctx) error {
 func (authorRouter *Router) authorByQuery(c *fiber.Ctx) error {
 	// Get the name from query parameters
 	name := c.Query("name")
+	log.Info().Str("name", name).Msg("GET author by query string 'name'")
 	return funcName(c, name, authorRouter)
 }
 
@@ -74,16 +73,12 @@ func funcName(c *fiber.Ctx, name string, authorRouter *Router) error {
 	decodedName, err := url.QueryUnescape(name)
 	if err != nil {
 		log.Error().Err(err).Str("name", name).Msg("Failed to decode author name")
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid author name",
-		})
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	if name == "" {
 		log.Error().Str("name", decodedName).Msg("Invalid author name")
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid author name",
-		})
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest("Invalid author name"))
 	}
 
 	log.Debug().Str("name", decodedName).Msg("Fetching author by name")
@@ -91,15 +86,13 @@ func funcName(c *fiber.Ctx, name string, authorRouter *Router) error {
 	if err != nil {
 		if errors.Is(err, exception.ErrorNotFound) {
 			log.Warn().Str("name", decodedName).Msg("Author not found by name")
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-				"error": "Author not found",
-			})
+			return c.Status(fiber.StatusNotFound).JSON(
+				resterr.NotFound("Author not found by name: " + decodedName))
 		}
 
 		log.Error().Err(err).Msg("Failed to fetch author by name")
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to fetch author",
-		})
+		return c.Status(fiber.StatusInternalServerError).JSON(
+			resterr.InternalServerError("Failed to fetch author by name"))
 	}
 
 	return c.JSON(result)

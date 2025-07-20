@@ -7,7 +7,7 @@ Note: In all examples, I'l use **zerolog** for logging because it is simple as f
 - [Application Configuration](config-ws/README.md)
   - Aconfig
     - [Aconfig Example](config-ws/aconfig-examples/simple-example/README.md)
-    - [ymal nced Example](config-ws/aconfig-examples/yaml-example/README.md)
+    - [yaml file Example](config-ws/aconfig-examples/yaml-example/README.md)
   - Godotenv
     - [Godotenv Example](config-ws/env-example/env-sample-01/README.md)
   - Viper
@@ -24,4 +24,8 @@ Note: In all examples, I'l use **zerolog** for logging because it is simple as f
 - [Golang Types](#golang-types)
 - [Zero Values](#zero-values)
 - [Database Configuration Example](#database-configuration-example)
+
+- [Web Frameworks](web-frameworks/README.md)
+  - [Fiber](web-frameworks/fiber/README.md)
+  - [Gin](web-frameworks/gin-gonic/README.md)
 

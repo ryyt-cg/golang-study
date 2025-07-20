@@ -7,4 +7,5 @@ server:
     baseURL: "/api/gof"
     host: localhost
     httpPort: ":8090"
+    logLevel: "info"
 
