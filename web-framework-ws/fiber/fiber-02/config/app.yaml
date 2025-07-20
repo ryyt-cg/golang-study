@@ -1,0 +1,16 @@
+appInfo:
+    name: "Go Fiber App"
+    description: "Use Go Fiber to build a web application"
+    version: "1.0.0"
+
+circuitBreaker:
+    failureThreshold: 3
+    timeout: 5
+    successThreshold: 2
+
+server:
+    baseURL: "/api/gof"
+    host: localhost
+    httpPort: ":8090"
+    logLevel: "info"
+
