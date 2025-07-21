@@ -19,6 +19,9 @@ Build a RESTful API using Fiber, a fast web framework for Go. This example demon
 - `GET /api/gof/v1/authors/names/:name`: Get author by name
 - `GET /api/gof/v1/authors/?name=:name`: Get author by name with query parameter
 
+## [swagger](https://github.com/gofiber/swagger)
+
+
 ## Load Testing
 - Using Grafana k6 for load testing.
 

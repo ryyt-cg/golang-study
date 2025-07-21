@@ -17,9 +17,9 @@ var (
 )
 
 type AppConfig struct {
-	AppInfo  AppInfoConfig  `yaml:"appInfo" validate:"required"`
-	Database DatabaseConfig `yaml:"database" validate:"required"`
-	Server   ServerConfig   `yaml:"server" validate:"required"`
+	AppInfo   AppInfoConfig             `yaml:"appInfo" validate:"required"`
+	Databases map[string]DatabaseConfig `yaml:"databases"`
+	Server    ServerConfig              `yaml:"server" validate:"required"`
 }
 
 // Validate all config required values are populated.
@@ -27,9 +27,6 @@ func (config AppConfig) Validate() error {
 	validate = validator.New(validator.WithRequiredStructEnabled())
 
 	if err := validate.Struct(config.AppInfo); err != nil {
-		panic(err.Error())
-	}
-	if err := validate.Struct(config.Database); err != nil {
 		panic(err.Error())
 	}
 

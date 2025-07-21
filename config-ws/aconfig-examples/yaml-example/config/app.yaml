@@ -7,13 +7,20 @@ server:
     host: localhost
     httpPort: ":8090"
 
-database:
-    sqlite:
+databases:
+    primary:
         driver: sqlite3
-        dsn: ${SQLITE_DSN}
-    postgres:
-        driver: postgres
-        dsn: ${POSTGRES_DSN}
-    max_idle_conns: 1
-    max_open_conns: 5
-    maxIdleTime: 60
+        host: localhost
+        name: primary_db.sqlite
+    secondary:
+        driver: postgresql
+        host: localhost
+        port: 5432
+        name: secondary_db
+        username: admin
+        password: ${PASSWORD}
+#        connectionPool:
+#            max_idle_connection: 10
+#            max_open_connection: 5
+#            maxIdleTime: 30
+

@@ -24,5 +24,6 @@ func main() {
 	loadConfig()
 	log.Debug().Any("server", app.Config.Server).Msg("Server Config")
 	log.Debug().Any("appInfo", app.Config.AppInfo).Msg("App Version")
-	log.Debug().Any("database", app.Config.Database).Msg("Database Config")
+	log.Debug().Any("primary", app.Config.Databases["primary"]).Msg("Primary Database")
+	log.Debug().Any("secondary", app.Config.Databases["secondary"]).Msg("Primary Database")
 }
