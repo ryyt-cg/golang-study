@@ -1,0 +1,18 @@
+name: localstack-ws
+volumes:
+  localstack-ws-data:
+    driver: local
+services:
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
+    image: localstack/localstack:latest
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      - SERVICES=s3,lambda,dynamodb # Specify the AWS services you need
+      - DEFAULT_REGION=us-east-1
+      - DEBUG=1 # Optional: enable debug logging
+    volumes:
+      - "./.localstack:/var/lib/localstack" # Persist data
+      - "/var/run/docker.sock:/var/run/docker.sock" # Required for Lambda functions
