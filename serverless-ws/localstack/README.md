@@ -50,5 +50,53 @@ docker-compose up -d
 ```
 This will start Localstack with the specified services and configurations.
 
+## Validate Localstack
+To validate that Localstack is running correctly, you can use the AWS CLI or the Localstack CLI. Here are some commands to check the status of Localstack:
+```bash
+# Check Localstack version
+localstack --version 
+# Check the status of Localstack
+localstack status
+# List all running services
+localstack status services
+# Check the logs for any errors or issues
+localstack logs
+```
 
+## Validate Localstack with AWS CLI
+To validate Localstack with the AWS CLI, you can use the following commands:
+```bash
+# List all available services
+aws --endpoint-url=http://localhost:4566 --region us-east-1 s3 ls
+# Create a new S3 bucket
+aws --endpoint-url=http://localhost:4566 --region us-east-1 s3 mb s3://my-test-bucket
+# List all S3 buckets
+aws --endpoint-url=http://localhost:4566 --region us-east-1 s3 ls
+# Delete the S3 bucket
+aws --endpoint-url=http://localhost:4566 --region us-east-1 s3 rb s3://my-test-bucket
+```
 
+## Validate Localstack with Terraform
+To validate Localstack with Terraform, you can create a simple Terraform configuration file. Here’s an example of how to create an S3 bucket using Terraform with Localstack:
+main.tf
+```hcl
+resource "aws_s3_bucket" "example" {
+  bucket = "my-tf-test-bucket"
+
+  tags = {
+    Name        = "My bucket"
+    Environment = "Dev"
+  }
+}
+provider "aws" {
+  region                      = "us-east-1"
+  s3_force_path_style         = true
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  access_key                  = "test"
+  secret_key                  = "test"
+  endpoints {
+    s3 = "http://localhost:4566"
+  }
+}
+```

@@ -1,3 +1,4 @@
 .env
 /serverless-ws/localstack/.localstack/
 /serverless-ws/localstack/volume/
+/serverless-ws/localstack/.terraform/
