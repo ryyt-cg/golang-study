@@ -1,0 +1,22 @@
+version = 0.1
+[DEV-WEST]
+[DEV-WEST.deploy]
+[DEV-WEST.deploy.parameters]
+stack_name = "ecode-service"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1u72odba8jy9q"
+s3_prefix = "ecode-service"
+region = "us-west-1"
+profile = "digital-oz-DigitalDeveloper-CXT-DIP"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "ecode-service"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1u72odba8jy9q"
+s3_prefix = "ecode-service"
+region = "us-west-1"
+profile = "digital-oz-DigitalDeveloper-CXT-DIP"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"

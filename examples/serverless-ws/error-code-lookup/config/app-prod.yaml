@@ -1,0 +1,7 @@
+# app info
+appInfo:
+  name: "Golang DIP Error Code REST API - local"
+  description: "DIP Error Code Lookup"
+  env: "PRD"
+  version: "1.0.0"
+  gitCommit: ${GIT_COMMIT}

@@ -1,0 +1,11 @@
+@startjson
+
+{
+    "appName": "Golang DIP Error Code REST API - DEV",
+    "description": "DIP Error Code Lookup",
+    "version": "1.0.0",
+    "ip": "52.53.177.91\n",
+    "gitCommit": ""
+}
+
+@endjson

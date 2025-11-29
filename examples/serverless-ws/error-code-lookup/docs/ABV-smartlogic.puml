@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+[User XYZ]
+
+cloud {
+    [ABV - FE]
+    [ABV - BE]
+}
+
+database "RAMS/CDP" {
+  folder "Bank Verification Request" {
+    [Data 3333]
+  }
+}
+
+[User XYZ] --> [ABV - FE]
+[ABV - FE] --> [ABV - BE]
+[ABV - BE] --> [Data 3333]
+
+
+@enduml

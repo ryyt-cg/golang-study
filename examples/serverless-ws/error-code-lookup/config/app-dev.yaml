@@ -1,0 +1,15 @@
+# app info
+appInfo:
+  name: "Golang DIP Error Code REST API"
+  description: "DIP Error Code Lookup"
+  env: "DEV"
+  version: "1.0.0"
+  gitCommit: ${GIT_COMMIT}
+
+database:
+  postgres:
+    driver: postgres
+    dsn: "user=night_koder password=koder!@# host=dip-rds-instance-1.cwbtknhxbnob.us-west-1.rds.amazonaws.com port=5432 dbname=icode sslmode=disable"
+  maxIdleConns: 0
+  maxOpenConns: 5
+  maxIdleTime: 60

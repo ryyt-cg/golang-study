@@ -1,0 +1,8 @@
+@startjson
+{
+    "id": "12345",
+    "code": "12345",
+    "description": "testing error code thru api",
+    "resolution": "look up thee definition - AWS"
+}
+@endjson

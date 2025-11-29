@@ -4,15 +4,15 @@ The examples are designed to be simple and easy to understand, focusing on the c
 
 Note: In all examples, I'l use **zerolog** for logging because it is simple as fmt.Println but more powerful.
 
-- [Application Configuration](config-ws/README.md)
+- [Application Configuration](examples/config-ws/README.md)
   - Aconfig
-    - [Aconfig Example](config-ws/aconfig-examples/simple-example/README.md)
-    - [yaml file Example](config-ws/aconfig-examples/yaml-example/README.md)
+    - [Aconfig Example](examples/config-ws/aconfig-examples/simple-example/README.md)
+    - [yaml file Example](examples/config-ws/aconfig-examples/yaml-example/README.md)
   - Godotenv
-    - [Godotenv Example](config-ws/env-example/env-sample-01/README.md)
+    - [Godotenv Example](examples/config-ws/env-example/env-sample-01/README.md)
   - Viper
-    - [Viper Example](config-ws/viper-with-env/README.md)
-    - [Viper with Environment Variables Example](config-ws/viper-with-env/README.md)
+    - [Viper Example](examples/config-ws/viper-with-env/README.md)
+    - [Viper with Environment Variables Example](examples/config-ws/viper-with-env/README.md)
   
 - [Database](#interfaces)
   - [The Empty Interface](#the-empty-interface)

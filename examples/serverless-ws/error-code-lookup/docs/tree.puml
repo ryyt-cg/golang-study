@@ -1,0 +1,57 @@
+@startsalt
+{
+{T
+ + World
+ ++ America
+ +++ Canada
+ +++ USA
+ ++++ New York
+ ++++ Boston
+ +++ Mexico
+ ++ Europe
+ +++ Italy
+ +++ Germany
+ ++++ Berlin
+ ++ Africa
+}
+}
+@endsalt
+
+├── com.cg.portfolio
+    └── controller
+        ├── AccountController
+        ├── ProductController
+        └── UserController
+    └── model
+        ├── Account
+        ├── Product
+        └── User
+    └── gateway
+        ├── AccountGateway
+        ├── ProductRepository
+        └── UserRepository
+    └── service
+        ├── AccountService
+        ├── ProductService
+        └── UserService
+    └── util
+
+
+
+├── com.cg.portfolio
+    └── account
+        ├── Account
+        ├── AccountController
+        ├── AccountGateway
+        └── AccountService
+    └── product
+        ├── Product
+        ├── ProductController
+        ├── ProductGateway
+        └── ProductService
+    └── util
+    └── user
+        ├── User
+        ├── UserController
+        ├── UserGateway
+        └── UserService

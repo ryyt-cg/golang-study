@@ -1,0 +1,282 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SAM Template for error-code-lookup
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 20
+    MemorySize: 128
+    Runtime: provided.al2
+    Architectures:
+      - arm64
+      #  LogGroupName: !Sub '/aws/lambda/${DynamoUpdateStoryLambda}'
+    Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+      Variables:
+        ENV: DEV
+        LOG_LEVEL: INFO
+        DD_FLUSH_TO_LOG: true
+        DD_TRACE_ENABLED: true
+        DD_API_KEY: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/dev/dip/datadog/api'
+    Tags:
+      lambda: datadog
+      usage-id: aa00002634
+      sd-period: NA
+      exp-date: 99-00-9999
+      ppmc-id: 85875
+      toc: NAD-MC
+      env-type: DEV-WEST
+      cost-center: 524102
+    VpcConfig:
+      SecurityGroupIds:
+        - sg-0a107b619093c7745
+      SubnetIds:
+        - subnet-05ac651aa02a9f553
+        - subnet-013fbbe249da50f07
+
+Resources:
+  DipApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: LambdaTokenAuthorizer
+        Authorizers:
+          LambdaTokenAuthorizer:
+            FunctionArn: !GetAtt AuthzFunction.Arn
+            Identity:
+              Headers:
+                - Authorization
+
+  DipEcodeLambdaBasicRole:
+    Type: AWS::IAM::Role
+    Properties:
+#      RoleName:
+#        Fn::Sub: DipEcodeLambdaBasicRole-${AWS::Region}
+      PermissionsBoundary: !Sub 'arn:aws:iam::${AWS::AccountId}:policy/AdminPermissionsBoundary'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - 'lambda.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName:
+            Fn::Sub: ecode-vpc-policy-${AWS::Region}
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ec2:CreateNetworkInterface'
+                  - 'ec2:DescribeNetworkInterfaces'
+                  - 'ec2:DeleteNetworkInterface'
+                Resource: '*'
+
+#  BasicAWSApiGateway:
+#    Type: AWS::Serverless::Api
+#    Properties:
+#      Name: Ecode AWS Api Gateway
+#      StageName: Prod
+#      EndpointConfiguration: REGIONAL
+
+  AuthzFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      FunctionName: error-code-lookup-authz
+      CodeUri: ./
+      Handler: authz_function
+#      Events:
+#        GetRoot:
+#          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+#          Properties:
+#            Path: /v1/authz
+#            Method: POST
+#      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+#        Variables:
+#          ENV: DEV
+#          LOG_LEVEL: INFO
+#      Role: !GetAtt DipEcodeLambdaBasicRole.Arn
+
+  AppInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: error-code-lookup-app-info
+      CodeUri: ./
+      Handler: info_function
+#      Tracing: Active # https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
+      Events:
+        GetRoot:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            RestApiId: !Ref DipApi
+            Path: /info
+            Method: GET
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          ENV: DEV
+          LOG_LEVEL: INFO
+      Role: !GetAtt DipEcodeLambdaBasicRole.Arn
+
+  InsertEcodeFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: error-code-lookup-insert-ecode
+      CodeUri: ./
+      Handler: bootstrap
+      Events:
+        GetRoot:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /v1/ecode
+            Method: POST
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          ENV: DEV
+          LOG_LEVEL: INFO
+      Role: !GetAtt DipEcodeLambdaBasicRole.Arn
+
+  GetAllEcodesFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: error-code-lookup-get-all-ecodes
+      CodeUri: ./
+      Handler: bootstrap
+      Events:
+        CatchAll:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /v1/ecode/all
+            Method: GET
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          ENV: DEV
+          LOG_LEVEL: INFO
+      Role: !GetAtt DipEcodeLambdaBasicRole.Arn
+
+#  GetEcodeByIdFunction:
+#    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+#    Properties:
+#      FunctionName: error-code-lookup-get-ecode-by-id
+#      CodeUri: api/ecode/func
+#      Handler: ecode_func
+#      Events:
+#        CatchAll:
+#          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+#          Properties:
+#            Path: /v1/ecode/{id}
+#            Method: GET
+#      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+#        Variables:
+#          ENV: DEV-WEST
+#          LOG_LEVEL: INFO
+#      Role: !GetAtt DipEcodeLambdaBasicRole.Arn
+#
+#  UpdateEcodeByIdFunction:
+#    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+#    Properties:
+#      FunctionName: error-code-lookup-update-ecode-by-id
+#      CodeUri: api/ecode/func
+#      Handler: ecode_func
+#      Events:
+#        CatchAll:
+#          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+#          Properties:
+#            Path: /v1/ecode/{id}
+#            Method: PUT
+#      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+#        Variables:
+#          ENV: DEV
+#          LOG_LEVEL: INFO
+#      Role: !GetAtt DipEcodeLambdaBasicRole.Arn
+#
+#  DeleteEcodeByIdFunction:
+#    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+#    Properties:
+#      FunctionName: error-code-lookup-delete-ecode-by-id
+#      CodeUri: api/ecode/func
+#      Handler: ecode_func
+#      Events:
+#        CatchAll:
+#          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+#          Properties:
+#            Path: /v1/ecode/{id}
+#            Method: DELETE
+#      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+#        Variables:
+#          ENV: DEV
+#          LOG_LEVEL: INFO
+#      Role: !GetAtt DipEcodeLambdaBasicRole.Arn
+
+Outputs:
+# ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+# Find out more about other implicit resources you can reference within SAM
+# https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  AppInfoFunctionAPI:
+    Description: "API Gateway endpoint URL for Prod environment for Info Function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/info/"
+  AppInfoFunction:
+    Description: "Info Lambda Function ARN"
+    Value: !GetAtt DipEcodeLambdaBasicRole.Arn
+  AppInfoFunctionIamRole:
+    Description: "Implicit IAM Role created for Info function"
+    Value: !GetAtt DipEcodeLambdaBasicRole.Arn
+
+  InsertEcodeFunctionAPI:
+    Description: "API Gateway endpoint URL for Prod environment for Insert Ecode Function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/v1/ecode"
+  InsertEcodeFunction:
+    Description: "Insert Ecode Lambda Function ARN"
+    Value: !GetAtt DipEcodeLambdaBasicRole.Arn
+  InsertEcodeFunctionIamRole:
+    Description: "Implicit IAM Role created for Insert Ecode function"
+    Value: !GetAtt DipEcodeLambdaBasicRole.Arn
+
+  GetEcodeByIdFunctionAPI:
+    Description: "API Gateway endpoint URL for Prod environment for Get Ecode Function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/v1/ecode/{id}"
+  GetEcodeByIdFunction:
+    Description: "Get Ecode Lambda Function ARN"
+    Value: !GetAtt DipEcodeLambdaBasicRole.Arn
+  GetEcodeByIdFunctionIamRole:
+    Description: "Implicit IAM Role created for Get Ecode by Id function"
+    Value: !GetAtt DipEcodeLambdaBasicRole.Arn
+
+  UpdateEcodeByIdFunctionAPI:
+    Description: "API Gateway endpoint URL for Prod environment for Update Ecode Function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/v1/ecode/{id}"
+  UpdateEcodeByIdFunction:
+    Description: "Update Ecode Lambda Function ARN"
+    Value: !GetAtt DipEcodeLambdaBasicRole.Arn
+  UpdateEcodeByIdFunctionIamRole:
+    Description: "Implicit IAM Role created for Update Ecode function"
+    Value: !GetAtt DipEcodeLambdaBasicRole.Arn
+
+  DeleteEcodeByIdFunctionAPI:
+    Description: "API Gateway endpoint URL for Prod environment for Insert Ecode Function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/v1/ecode"
+  DeleteEcodeByIdFunction:
+    Description: "Insert Ecode Lambda Function ARN"
+    Value: !GetAtt DipEcodeLambdaBasicRole.Arn
+  DeleteEcodeByIdFunctionIamRole:
+    Description: "Implicit IAM Role created for Insert Ecode function"
+    Value: !GetAtt DipEcodeLambdaBasicRole.Arn
+
+#Parameters:
+#  ENV:
+#    Type: String
+#    AllowedValues:
+#      - DEV-WEST
+
+#Mappings:
+#  EcodePropMap:
+#    'DEV-WEST':
+#      SG: sg-0a107b619093c7745
+#      SBN1: subnet-013fbbe249da50f07
+#      SBN2: subnet-05ac651aa02a9f553

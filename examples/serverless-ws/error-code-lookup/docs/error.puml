@@ -1,0 +1,19 @@
+@startjson
+{
+    "errors": [
+        {
+            "error": "auth-0001",
+            "message": "Incorrect username and password",
+            "detail": "Ensure that the username and password included in the request are correct",
+            "help": "https://example.com/help/error/auth-0001"
+        },
+        {
+                "error": "auth-0002",
+                "message": "Incorrect username and password",
+                "detail": "Ensure that the username and password included in the request are correct",
+                "help": "https://example.com/help/error/auth-0001"
+
+        }
+    ]
+}
+@endjson
